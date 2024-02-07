@@ -1,0 +1,19 @@
+<h1>CHAT:</h1>
+
+<div id="userNameForm">
+    <input type="text" id="userNameInput" placeholder="Your name here..." />
+    <input type="text" id="userEmailInput" placeholder="Your email..." />
+    <button onclick="setUserName()">Join chat</button>
+</div>
+
+<div id="chatContainer" style="display: none;">
+    <div id="chatBox" class="chatBox">
+    </div>
+    <div id="messageForm">
+        <input type="text" id="messageInput" placeholder="Write message..." />
+        <button onclick="sendMessage()">Send</button>
+    </div>
+</div>
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="js/chatScripts.js"></script>

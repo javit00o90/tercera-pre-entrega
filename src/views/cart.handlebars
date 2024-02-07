@@ -1,0 +1,45 @@
+<h1>Cart</h1>
+{{#if cart.products.length}}
+<ul>
+    {{#each cart.products}}
+    <li>
+        <strong>{{this._id.title}}</strong>
+        <p>Description: {{this._id.description}}</p>
+        <p>Price: {{this._id.price}}</p>
+        <p>Quantity: {{this.quantity}}</p>
+    </li>
+    {{/each}}
+</ul>
+<form id="purchaseForm" action="http://localhost:8080/api/carts/{{cart._id}}/purchase" method="post">
+    <button type="submit" id="purchaseBtn">Purchase</button>
+</form>
+
+<form id="clearCartForm" action="http://localhost:8080/api/carts/{{cart._id}}" method="post">
+    <input type="hidden" name="_method" value="DELETE">
+    <button type="submit" id="clearCartBtn">Clear Cart</button>
+</form>
+{{else}}
+<p>Your cart is empty!</p>
+{{/if}}
+
+
+<script>
+    const clearCartForm = document.getElementById('clearCartForm');
+    if (clearCartForm) {
+        clearCartForm.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            try {
+                const response = await fetch(event.target.action, {
+                    method: 'DELETE',
+                });
+                if (response.ok) {
+                    window.location.reload();
+                } else {
+                    console.error('Error clearing cart:', response.statusText);
+                }
+            } catch (error) {
+                console.error('Error clearing cart:', error.message);
+            }
+        });
+    }
+</script>

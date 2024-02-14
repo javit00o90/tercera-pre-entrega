@@ -1,14 +1,11 @@
 import mongoose from 'mongoose';
 
-const ticketSchema = new mongoose.Schema({
+const ticketSchema = new mongoose.Schema(
+    {
     code: {
         type: String,
         unique: true,
         required: true
-    },
-    purchase_datetime: {
-        type: Date,
-        default: Date.now
     },
     amount: {
         type: Number,
@@ -18,9 +15,14 @@ const ticketSchema = new mongoose.Schema({
         type: String,
         required: true
     }
+},
+{
+    timestamps: {
+        createdAt: "purchase_datetime"
+    }
 });
 
-ticketSchema.pre('save', async function(next) {
+ticketSchema.pre('save', async function (next) {
     if (!this.code) {
         let codeExists = true;
         let newCode;

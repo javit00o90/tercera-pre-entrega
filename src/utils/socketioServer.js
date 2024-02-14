@@ -7,11 +7,11 @@ export const initializeSocket = (server, app) => {
     app.set('io', io);
 
     io.on('connection', async (socket) => {
-
         socket.on('setUserName', (userInfo) => {
             socket.userName = userInfo.userName;
             socket.userEmail = userInfo.userEmail;
             io.emit('userConnected', socket.userName);
+            console.log(`${socket.userName} has connected`);
         });
 
         try {

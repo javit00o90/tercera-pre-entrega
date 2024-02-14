@@ -4,7 +4,7 @@ class TicketsService {
     async generateTicket(purchaseDetails) {
         try {
             const ticket = await ticketsModel.create(purchaseDetails);
-            return ticket;
+            return ticket.toObject();
         } catch (error) {
             console.log(purchaseDetails)
             console.error('Error generating ticket:', error.message);

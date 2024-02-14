@@ -1,32 +1,14 @@
 const socket = io();
-
 function setUserName() {
-    const userNameInput = document.getElementById('userNameInput');
-    const userEmailInput = document.getElementById('userEmailInput');
-
-    const userName = userNameInput.value.trim();
-    const userEmail = userEmailInput.value.trim();
-
-    if (userName === '' || userEmail === '') {
-        alert('Please enter both name and email.');
-        return;
-    }
-
-    if (!isValidEmail(userEmail)) {
-        alert('Please enter a valid email.');
-        return;
-    }
-
+    const userData = document.getElementById('userData');
+    const userName = userData.getAttribute('data-user-name');
+    const userEmail = userData.getAttribute('data-user-email');
     socket.emit('setUserName', { userName, userEmail });
 
-    document.getElementById('userNameForm').style.display = 'none';
-    document.getElementById('chatContainer').style.display = 'block';
+    document.getElementById('messageForm').style.display = 'block';
+    document.getElementById('joinChatBtn').style.display = 'none';
 }
 
-function isValidEmail(email) {
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return emailRegex.test(email);
-}
 
 socket.on('chatHistory', (history) => {
     const chatBox = document.getElementById('chatBox');

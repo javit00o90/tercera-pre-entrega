@@ -157,67 +157,78 @@ class CartController {
             res.status(500).json({ error: "Server error" });
         }
     }
-    generateTicketCode() {
-        return Math.random().toString(36).substring(2, 10);
-    }
-
+    
     purchaseCart = async (req, res) => {
         try {
             const cartId = req.params.cid;
             const cart = await this.cartService.getCartById(cartId);
-
+            
+    
             if (!cart || cart === "Cart not found.") {
                 return res.status(404).json({ error: "Cart not found." });
             }
-
+    
             const productsWithInsufficientStock = [];
             let allProductsOutOfStock = true;
-
+    
             for (const product of cart.products) {
                 const productDetails = await this.productService.getProductById(product._id);
-
+    
                 if (!productDetails || productDetails === "Product not found.") {
                     continue;
                 }
-
+    
                 const productId = productDetails._id.toString();
+                const productTitle = productDetails.title;
                 const requestedQuantity = product.quantity;
                 const availableStock = productDetails.stock;
-
+    
                 if (availableStock >= requestedQuantity) {
                     const newStock = availableStock - requestedQuantity;
                     await this.productService.updateProduct(productId, { stock: newStock });
                     await this.cartService.removeProductFromCart(cartId, productId);
-
+    
                     product.quantity = requestedQuantity;
                     allProductsOutOfStock = false;
                 } else {
                     productsWithInsufficientStock.push({
-                        productId,
+                        productTitle,
                         requestedQuantity,
                         availableStock
                     });
                 }
             }
-
+    
             if (productsWithInsufficientStock.length === cart.products.length) {
-                return res.status(400).json({ error: "All products are out of stock." });
+                const user = req.user;
+                return res.render('purchase', {
+                    error: "All products are out of stock.",
+                    productsWithInsufficientStock,
+                    session: { user }
+                });
             }
-
+            const ticketCode = Math.random().toString(36).substring(2, 10);
             const ticketData = {
-                code: this.generateTicketCode(),
+                code: ticketCode,
                 amount: cart.products.reduce((total, product) => total + (product._id.price * product.quantity), 0),
                 purchaser: req.user.email
             };
-
+    
             const ticket = await this.ticketService.generateTicket(ticketData);
-
-            res.status(200).json({ message: "Purchase completed!", productsWithInsufficientStock, ticket });
+    
+            const user = req.user;
+            res.render('purchase', {
+                message: "Purchase completed!",
+                productsWithInsufficientStock,
+                ticket,
+                session: { user }
+            });
         } catch (error) {
             console.error('Error purchasing cart:', error.message);
             res.status(500).json({ error: "Server error" });
         }
     }
+
 }
 
 

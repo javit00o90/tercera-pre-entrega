@@ -38,6 +38,7 @@ h3 {
     flex-wrap: wrap;
     gap: 20px;
 }
+
 #productosContainerAdmin {
     display: flex;
     flex-wrap: wrap;
@@ -161,11 +162,63 @@ p {
 }
 
 
-.githubButton a{
+.githubButton a {
     display: inline-block;
     margin-right: 0px;
     text-decoration: none;
     color: rgba(255, 255, 255, 0);
     border: 0px solid #ccc;
     padding: 0px;
+}
+
+.successMsj {
+    color: green
+}
+
+.errorMsj {
+    color: red
+}
+
+.ticket {
+    width: 300px;
+    background-color: #fff;
+    border: 2px solid #000;
+    padding: 20px;
+    margin: 20px;
+}
+
+.ticket-info {
+    margin-bottom: 10px;
+}
+
+.ticket-info span {
+    font-weight: bold;
+}
+
+.ticket-code {
+    font-size: 20px;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.ticket-timestamp {
+    font-size: 12px;
+    text-align: center;
+}
+
+.ticket-amount {
+    font-size: 18px;
+}
+
+.ticket-purchaser {
+    font-style: italic;
+}
+
+.ticket-footer {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.ticket-footer p {
+    margin: 0;
 }
